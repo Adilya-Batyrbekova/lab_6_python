@@ -44,3 +44,77 @@ strace -c -f -S name ls 2>&1 1>/dev/null | tail -n +3 | head -n -2 | awk '{print
 ```
 ![alt text](image-4.png)
 
+# Linux Kernel Capabilities and Docker
+
+## Шаг 1: Тестирование возможностей Docker
+``` 
+docker run --rm -it alpine chown nobody /
+docker run --rm -it --cap-drop ALL --cap-add CHOWN alpine chown nobody /
+docker run --rm -it --cap-drop CHOWN alpine chown nobody /
+docker run --rm -it --cap-add chown -u nobody alpine chown nobody /
+```
+![alt text](image-5.png)
+
+## Шаг 2: Дополнительно для экспертов
+```
+docker run --rm -it alpine sh -c 'apk add -U libcap; capsh --print'
+docker run --rm -it alpine sh -c 'apk add -U libcap;capsh --help'
+```
+![alt text](image-6.png)
+![alt text](image-7.png)
+
+# Docker Networking Hands-on Lab
+## Раздел №1 — Основы сетевых технологий
+### Шаг 1: Сетевая команда Docker
+```
+docker network
+```
+![alt text](image-8.png)
+
+### Шаг 2: Список сетей
+```
+docker network ls
+```
+![alt text](image-9.png)
+
+### Шаг 3: Проверка сети
+```
+docker network inspect bridge
+```
+![alt text](image-10.png)
+
+### Шаг 4: Перечислите подключаемые модули сетевых драйверов
+```
+docker info
+```
+![alt text](image-11.png)
+
+## Раздел №2 – Сетевое взаимодействие мостов
+### Шаг 1: Основы
+Каждая чистая установка Docker поставляется с предварительно созданной сетью, называемой bridge . Проверьте это с помощью docker network ls.
+```
+docker network ls
+```
+![alt text](image-16.png)
+
+### Шаг 2: Подключите контейнер
+Создайте новый контейнер, запустив
+```
+docker run -dt ubuntu sleep infinity
+docker ps
+```
+
+
+### Шаг 3: Проверка сети
+Команда docker network inspectиспользуется для просмотра деталей конфигурации сети. Эти детали включают: имя, идентификатор, драйвер, драйвер IPAM, информацию о подсети, подключенные контейнеры и многое другое.
+```
+docker network inspect bridge
+```
+![alt text](image-14.png)
+
+### Шаг 4: Перечислите подключаемые модули сетевых драйверов
+Команда docker infoпоказывает много интересной информации об установке Docker.
+```
+docker info
+```
+![alt text](image-15.png)
