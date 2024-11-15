@@ -102,19 +102,29 @@ docker network ls
 ```
 docker run -dt ubuntu sleep infinity
 docker ps
-```
-
-
-### Шаг 3: Проверка сети
-Команда docker network inspectиспользуется для просмотра деталей конфигурации сети. Эти детали включают: имя, идентификатор, драйвер, драйвер IPAM, информацию о подсети, подключенные контейнеры и многое другое.
-```
 docker network inspect bridge
 ```
-![alt text](image-14.png)
+![alt text](image-17.png)
 
-### Шаг 4: Перечислите подключаемые модули сетевых драйверов
-Команда docker infoпоказывает много интересной информации об установке Docker.
+
+### Шаг 3: Проверка сетевого подключения
 ```
-docker info
+docker ps
+docker exec -it 9729  /bin/bash
+apt-get update && apt-get install -y iputils-ping
+ ping -c5 www.github.com
+ exit
+ docker stop 9729
 ```
-![alt text](image-15.png)
+![alt text](image-18.png)
+
+
+### Шаг 4: Настройте NAT для внешнего подключения
+Запустите новый контейнер на основе официального образа NGINX, запустив
+```
+docker run --name web1 -d -p 8080:80 nginx
+```
+Проверьте состояние контейнера и сопоставление портов, запустив
+```
+docker ps
+``` 
