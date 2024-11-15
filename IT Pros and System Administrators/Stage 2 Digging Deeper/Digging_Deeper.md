@@ -127,4 +127,35 @@ docker run --name web1 -d -p 8080:80 nginx
 Проверьте состояние контейнера и сопоставление портов, запустив
 ```
 docker ps
+curl 127.0.0.1:8080
 ``` 
+![alt text](image-19.png)
+
+## Раздел №3 – Наложенные сети
+### Шаг 1: Основы
+```
+docker swarm init --advertise-addr $(hostname -i)
+docker node ls
+```
+![alt text](image-20.png)
+
+### Шаг 2: Создание оверлейной сети
+```
+docker network create -d overlay overnet
+docker network ls
+docker network inspect overnet
+```
+![alt text](image-21.png)
+
+### Шаг 3: Создайте услугу
+```
+docker service create --name myservice \
+--network overnet \
+--replicas 2 \
+ubuntu sleep infinity
+docker service ls
+docker service ps myservice
+docker network ls
+docker network inspect overnet
+```
+![alt text](image-22.png)
