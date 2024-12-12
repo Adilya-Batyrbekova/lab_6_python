@@ -159,3 +159,65 @@ docker network ls
 docker network inspect overnet
 ```
 ![alt text](image-22.png)
+
+# Практическая лаборатория по оркестровке Docker
+## Раздел 1: Настройка режима Swarm
+```
+docker run -dt ubuntu sleep infinity
+docker ps
+```
+![alt text](image-23.png)
+![alt text](image-24.png)
+
+### Шаг 2.1 — Создание узла менеджера
+```
+docker swarm init --advertise-addr $(hostname -i)
+docker info
+```
+![alt text](image-25.png)
+
+### Шаг 2.2. Присоединение рабочих узлов к Swarm
+```
+docker node ls
+```
+![alt text](image-26.png)
+
+## Раздел 3: Развертывание приложений на нескольких хостах
+### Шаг 3.1. Развертывание компонентов приложения как служб Docker
+```
+docker service create --name sleep-app ubuntu sleep infinity
+docker service ls
+```
+
+![alt text](image-27.png)
+![alt text](image-28.png)
+
+## Раздел 4: Масштабирование приложения
+```
+docker service update --replicas 7 sleep-app
+docker service ps sleep-app
+docker service update --replicas 4 sleep-app
+docker service ps sleep-app
+```
+![alt text](image-29.png)
+![alt text](image-30.png)
+![alt text](image-31.png)
+![alt text](image-32.png)
+
+## Раздел 5: Очистка узла и перепланировка контейнеров
+```
+docker node ls
+docker ps
+docker node ls
+docker service ps sleep-app
+```
+![alt text](image-33.png)
+![alt text](image-34.png)
+
+### Уборка
+```
+docker service rm sleep-app
+docker ps
+docker swarm leave --force
+```
+![alt text](image-35.png)
