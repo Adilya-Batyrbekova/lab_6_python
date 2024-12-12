@@ -281,3 +281,4 @@ docker stack ls
 ```
 
 ![alt text](image-65.png)
+![alt text](image-66.png)
